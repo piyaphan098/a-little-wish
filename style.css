@@ -1,20 +1,29 @@
-:root{--pink:#ffc2d6;--pink-d:#ff9ec1;--cream:#fff3e0;--lav:#d9c8f5;--blue:#a9d4f5;--night:#1c2352;--night2:#3a3f7a}
+:root{--pink:#ffc2d6;--pink-d:#ff9ec1;--cream:#fff3e0;--lav:#d9c8f5;--blue:#a9d4f5;--gold:#f6d9a8;--night:#1c2352;--night2:#3a3f7a}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{font-family:'Mali','Sarabun',sans-serif;color:var(--cream);background:var(--night)}
 
 /* ---------- ฉากหลัง ---------- */
-.backdrop{position:fixed;inset:0;background:linear-gradient(var(--night) 0%,var(--night2) 62%,#6a5fa8 100%)}
-.stars{position:absolute;inset:0 0 35% 0}
-.star{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cream);animation:twinkle 3s ease-in-out infinite}
+.backdrop{position:fixed;inset:0;transform-origin:70% 60%;transition:transform 7s ease-out;
+  background:linear-gradient(#1c2352 0%,#3a3f7a 32%,#7b5ea8 52%,#e69bbd 66%,#e69bbd 100%)}
+body[data-scene="1"] .backdrop{transform:scale(1.08)}   /* Scene 2: กล้องค่อย ๆ เคลื่อนเข้าหาแม่น้ำ */
+body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
+.stars{position:absolute;inset:0 0 40% 0}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cream);box-shadow:0 0 6px var(--gold);animation:twinkle 3s ease-in-out infinite}
 @keyframes twinkle{50%{opacity:.2;transform:scale(.6)}}
-.moon{position:absolute;top:7%;right:10%;width:clamp(70px,20vmin,130px);aspect-ratio:1;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,#fffaf0,#ffe9c7);box-shadow:0 0 60px 20px rgba(255,236,200,.35)}
-.river{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(#4a4f94,#262c63);overflow:hidden}
-.shimmer{position:absolute;top:0;right:12%;width:90px;height:100%;
-  background:repeating-linear-gradient(transparent 0 8px,rgba(255,236,200,.45) 8px 11px);
+.moon{--mw:clamp(96px,28vmin,180px);position:absolute;top:6%;right:10%;width:var(--mw);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 30% 35%,rgba(214,176,120,.38) 0 7%,transparent 8%),radial-gradient(circle at 64% 62%,rgba(214,176,120,.32) 0 12%,transparent 13%),
+  radial-gradient(circle at 70% 26%,rgba(214,176,120,.3) 0 5%,transparent 6%),radial-gradient(circle at 35% 35%,#fffaf0,#ffeacb 65%,#f6d9a8);
+  box-shadow:0 0 70px 26px rgba(255,226,170,.38),0 0 180px 70px rgba(255,194,214,.22)}
+.lantern{position:absolute;left:var(--x);top:var(--y);width:var(--s);filter:drop-shadow(0 0 14px rgba(255,200,120,.75));
+  animation:lift 7s ease-in-out var(--d) infinite alternate}
+@keyframes lift{from{transform:translate(0,0) rotate(-3deg)}to{transform:translate(8px,-18px) rotate(3deg)}}
+.river{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(#a87bc0 0%,#6a4fa0 40%,#34306f 100%);overflow:hidden}
+.shimmer{position:absolute;top:0;right:10%;width:var(--mw,140px);height:100%;
+  background:repeating-linear-gradient(transparent 0 7px,rgba(255,232,180,.6) 7px 10px);
   mask:linear-gradient(#000,transparent);-webkit-mask:linear-gradient(#000,transparent);animation:wave 4s ease-in-out infinite alternate}
-@keyframes wave{to{transform:translateX(-14px) scaleX(1.2)}}
+@keyframes wave{to{transform:translateX(-12px) scaleX(1.15)}}
+.pier{width:min(70vw,260px);height:14px;margin:-6px auto 0;border-radius:4px;background:linear-gradient(#d9a96e,#a8743f);box-shadow:0 18px 0 -4px #6d4a2a,0 10px 18px rgba(0,0,0,.35)}
 
 /* ---------- Scene & Transition ---------- */
 .stage{position:fixed;inset:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -22,7 +31,8 @@ body{font-family:'Mali','Sarabun',sans-serif;color:var(--cream);background:var(-
   padding:16px 20px;text-align:center;opacity:0;transform:scale(.97);transition:opacity .5s,transform .5s;pointer-events:none;overflow-y:auto}
 .scene.active{opacity:1;transform:none;pointer-events:auto}
 .scene[hidden]{display:none}
-.title{font-size:clamp(2.2rem,9vw,3.6rem);color:var(--pink);text-shadow:0 0 24px rgba(255,194,214,.6)}
+.title{font-size:clamp(2.2rem,9vw,3.6rem);color:var(--gold);text-shadow:0 0 26px rgba(255,214,150,.65),0 2px 10px rgba(28,35,82,.7)}
+.lead,.sub,.hint{text-shadow:0 2px 10px rgba(28,35,82,.75)}
 .sub,.hint{opacity:.85}
 .lead{font-size:clamp(1.1rem,4.4vw,1.5rem);line-height:1.7;max-width:22em}
 
@@ -44,6 +54,7 @@ body{font-family:'Mali','Sarabun',sans-serif;color:var(--cream);background:var(-
 .gift.open{animation:pop .9s}
 @keyframes pop{40%{transform:scale(1.12)}}
 .lanterns{display:flex;gap:26px;font-size:2.4rem}
+.lanterns img{width:42px;filter:drop-shadow(0 0 12px rgba(255,200,120,.7));animation:bob 3.4s ease-in-out infinite}.lanterns img:nth-child(2){animation-delay:.6s}.lanterns img:nth-child(3){animation-delay:1.2s}
 .lanterns span{animation:bob 3.4s ease-in-out infinite}.lanterns span:nth-child(2){animation-delay:.6s}.lanterns span:nth-child(3){animation-delay:1.2s}
 
 /* ---------- สร้างกระทง ---------- */

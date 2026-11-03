@@ -32,6 +32,7 @@ function krathongSVG(lit) {
 }
 
 /* ====== ตัวช่วย ====== */
+document.body.dataset.scene = 0;   // ใช้ให้ CSS ขยับกล้องฉากหลังตาม Scene
 const $ = id => document.getElementById(id);
 const scenes = [...document.querySelectorAll('.scene')];
 let current = 0, busy = false;      // busy = กันการกดซ้ำระหว่างเปลี่ยน Scene
@@ -43,7 +44,7 @@ function goTo(next) {
   from.classList.remove('active');
   setTimeout(() => {
     from.hidden = true; to.hidden = false;
-    current = next; onEnter(next);
+    current = next; document.body.dataset.scene = next; onEnter(next);
     requestAnimationFrame(() => to.classList.add('active'));
     setTimeout(() => { busy = false; }, 500);
   }, 500);
@@ -101,11 +102,6 @@ buildChoices('chooseCandle', CANDLES, 'candle', true);
 
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => goTo(+b.dataset.go));
 
-// Scene 1: เปิดกล่องของขวัญ
-$('openGift').onclick = e => {
-  e.currentTarget.disabled = true; $('gift').classList.add('open');
-  setTimeout(() => goTo(1), 1200);
-};
 // Scene 4: จุดเทียน
 $('lightBtn').onclick = e => {
   e.currentTarget.disabled = true;
@@ -126,7 +122,6 @@ $('envelope').onclick = () => {
 };
 $('replayBtn').onclick = () => {
   state.wish = ''; $('wishInput').value = ''; $('wishCount').textContent = '0';
-  $('gift').classList.remove('open'); $('openGift').disabled = false;
   goTo(0);
 };
 
