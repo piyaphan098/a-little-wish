@@ -18,49 +18,42 @@
   <img class="lantern" src="lantern.svg" alt="" style="--x:24%;--y:30%;--s:34px;--d:-2s">
   <img class="lantern" src="lantern.svg" alt="" style="--x:70%;--y:34%;--s:40px;--d:-4s">
   <img class="lantern" src="lantern.svg" alt="" style="--x:88%;--y:52%;--s:30px;--d:-1s">
-  <div class="river"><div class="shimmer"></div></div>
+  <div class="river"><div class="shimmer"></div><span class="pads left" data-pads></span><span class="pads right" data-pads></span></div>
 </div>
 
 <main class="stage">
   <!-- Scene 1: Welcome -->
-  <section class="scene active" data-scene="0">
+  <section class="scene active on-water" data-scene="0">
     <h1 class="title">A Little Wish ♡</h1>
     <p class="lead">คืนนี้มีพระจันทร์สวย ๆ<br>กับกระทงหนึ่งใบ<br>มาใช้เวลาน่ารัก ๆ ด้วยกันไหม ♡</p>
-    <div class="bear-wrap"><span data-bear></span><div class="pier"></div></div>
+    <div class="bear-wrap"><span data-bear></span><span data-pier></span></div>
     <button class="btn" data-go="1">เริ่มต้นเรื่องราว</button>
   </section>
 
   <!-- Scene 2: Riverside -->
-  <section class="scene" data-scene="1" hidden>
+  <section class="scene on-water" data-scene="1" hidden>
     <p class="lead">คืนนี้พระจันทร์สวยจัง<br>ริมแม่น้ำมีโคมไฟและดอกไม้รออยู่</p>
-    <div class="lanterns" aria-hidden="true"><img src="lantern.svg" alt=""><img src="lantern.svg" alt=""><img src="lantern.svg" alt=""></div>
-    <span data-bear></span>
+    <div class="bear-wrap"><span data-bear></span><span data-pier></span></div>
     <button class="btn" data-go="2">มาเริ่มทำกระทงกัน</button>
   </section>
 
   <!-- Scene 3: Create Krathong -->
-  <section class="scene" data-scene="2" hidden>
+  <section class="scene on-water" data-scene="2" hidden>
     <div class="preview" id="preview1"></div>
-    <div class="panel">
-      <p class="label">รูปแบบกระทง</p>
-      <div class="choices" id="chooseBase"></div>
-      <p class="label">ดอกไม้ตกแต่ง</p>
-      <div class="choices" id="chooseFlower"></div>
-      <p class="label">สีเทียน</p>
-      <div class="choices" id="chooseCandle"></div>
-    </div>
-    <button class="btn" data-go="3">เสร็จแล้ว</button>
+    <p class="krathong-name" id="krathongName"></p>
+    <div class="choices" id="chooseTheme"></div>
+    <button class="btn" data-go="3">เลือกกระทงนี้</button>
   </section>
 
   <!-- Scene 4: Light Candle -->
-  <section class="scene" data-scene="3" hidden>
+  <section class="scene on-water" data-scene="3" hidden>
     <p class="lead" id="candleText">กระทงของเธอพร้อมแล้ว<br>ลองจุดเทียนดูนะ</p>
     <div class="preview big" id="preview2"></div>
     <button class="btn" id="lightBtn">จุดเทียน</button>
   </section>
 
   <!-- Scene 5: Floating -->
-  <section class="scene" data-scene="4" hidden>
+  <section class="scene on-water" data-scene="4" hidden>
     <p class="lead">กระทงกำลังลอยไปช้า ๆ</p>
     <div class="floater" id="floater"></div>
     <p class="wish-toast" id="wishToast" aria-live="polite"></p>

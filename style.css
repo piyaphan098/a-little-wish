@@ -5,7 +5,7 @@ body{font-family:'Mali','Sarabun',sans-serif;color:var(--cream);background:var(-
 
 /* ---------- ฉากหลัง ---------- */
 .backdrop{position:fixed;inset:0;transform-origin:70% 60%;transition:transform 7s ease-out;
-  background:linear-gradient(#1c2352 0%,#3a3f7a 32%,#7b5ea8 52%,#e69bbd 66%,#e69bbd 100%)}
+  background:linear-gradient(#1c2352 0%,#3a3f7a 26%,#7b5ea8 42%,#e69bbd 58%,#e69bbd 100%)}
 body[data-scene="1"] .backdrop{transform:scale(1.08)}   /* Scene 2: กล้องค่อย ๆ เคลื่อนเข้าหาแม่น้ำ */
 body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 .stars{position:absolute;inset:0 0 40% 0}
@@ -18,12 +18,11 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 .lantern{position:absolute;left:var(--x);top:var(--y);width:var(--s);filter:drop-shadow(0 0 14px rgba(255,200,120,.75));
   animation:lift 7s ease-in-out var(--d) infinite alternate}
 @keyframes lift{from{transform:translate(0,0) rotate(-3deg)}to{transform:translate(8px,-18px) rotate(3deg)}}
-.river{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(#a87bc0 0%,#6a4fa0 40%,#34306f 100%);overflow:hidden}
+.river{position:absolute;left:0;right:0;bottom:0;height:34%;transition:height 1.2s ease;background:linear-gradient(#a87bc0 0%,#6a4fa0 40%,#34306f 100%);overflow:hidden}
 .shimmer{position:absolute;top:0;right:10%;width:var(--mw,140px);height:100%;
   background:repeating-linear-gradient(transparent 0 7px,rgba(255,232,180,.6) 7px 10px);
   mask:linear-gradient(#000,transparent);-webkit-mask:linear-gradient(#000,transparent);animation:wave 4s ease-in-out infinite alternate}
 @keyframes wave{to{transform:translateX(-12px) scaleX(1.15)}}
-.pier{width:min(70vw,260px);height:14px;margin:-6px auto 0;border-radius:4px;background:linear-gradient(#d9a96e,#a8743f);box-shadow:0 18px 0 -4px #6d4a2a,0 10px 18px rgba(0,0,0,.35)}
 
 /* ---------- Scene & Transition ---------- */
 .stage{position:fixed;inset:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
@@ -47,7 +46,7 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 /* ---------- หมี & ของขวัญ ---------- */
 .bear{width:clamp(110px,28vmin,170px);animation:bob 3s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-8px)}}
-.bear-wrap{display:flex;align-items:flex-end;justify-content:center;gap:8px}
+.bear-wrap{display:flex;flex-direction:column;align-items:center}
 .gift{width:clamp(110px,30vmin,170px)}
 .gift-lid{transform-origin:20% 60%;transition:transform .9s cubic-bezier(.3,1.4,.5,1)}
 .gift.open .gift-lid{transform:translateY(-34px) rotate(-26deg)}
@@ -58,9 +57,9 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 .lanterns span{animation:bob 3.4s ease-in-out infinite}.lanterns span:nth-child(2){animation-delay:.6s}.lanterns span:nth-child(3){animation-delay:1.2s}
 
 /* ---------- สร้างกระทง ---------- */
-.preview{width:clamp(150px,42vw,230px);filter:drop-shadow(0 8px 14px rgba(0,0,0,.3))}
-.preview.big{width:clamp(220px,64vw,340px)}
-.preview svg,.floater svg{width:100%;height:auto;display:block}
+.preview{width:clamp(230px,72vw,330px);filter:drop-shadow(0 8px 14px rgba(0,0,0,.3))}
+.preview.big{width:clamp(260px,80vw,390px)}
+.preview svg,.floater svg{width:100%;height:auto;display:block;overflow:visible}
 .panel{width:min(100%,420px);background:rgba(255,243,224,.14);border-radius:22px;padding:12px 14px;backdrop-filter:blur(4px)}
 .label{font-weight:700;font-size:.95rem;margin:4px 0}
 .choices{display:flex;gap:10px;justify-content:center;margin-bottom:6px}
@@ -70,7 +69,8 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 .swatch{width:48px;padding:0}
 
 /* ---------- เปลวเทียน & แสง ---------- */
-.flame{transform-origin:50% 100%;animation:flicker 1.1s ease-in-out infinite alternate}
+.flame,.lit-in{transform-box:fill-box;transform-origin:50% 100%}
+.flame{animation:flicker 1.1s ease-in-out infinite alternate}
 @keyframes flicker{from{transform:scale(1,.9) rotate(-3deg)}to{transform:scale(.9,1.1) rotate(3deg)}}
 .glow{animation:breathe 2.4s ease-in-out infinite alternate}
 @keyframes breathe{to{opacity:.65}}
@@ -78,7 +78,7 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 @keyframes ignite{from{opacity:0;transform:scale(.2)}}
 
 /* ---------- กระทงลอย ---------- */
-.floater{width:clamp(150px,40vw,210px);margin-top:12vh;animation:drift 14s ease-in-out infinite alternate}
+.floater{width:clamp(200px,54vw,270px);animation:drift 14s ease-in-out infinite alternate}
 @keyframes drift{from{transform:translateX(-26vw) rotate(-2deg)}50%{transform:translateX(0) translateY(6px) rotate(2deg)}to{transform:translateX(26vw) rotate(-2deg)}}
 .wish-toast{min-height:3.2em;font-size:1.15rem;color:var(--pink);opacity:0;transition:opacity .6s}
 .wish-toast.show{opacity:1}
@@ -114,5 +114,23 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 #wishFinal{display:flex;flex-direction:column;align-items:center;animation:cardIn .8s ease-out}
 .wish-card.sending{transition:transform .9s ease-in,opacity .9s;transform:translateY(-40px) scale(.9);opacity:0}
 
-@media (max-height:640px){.title{font-size:2rem}.preview{width:120px}.floater{margin-top:4vh}}
+/* ---------- ยืนบนพื้น / ลอยบนน้ำ ---------- */
+body[data-scene="0"] .river,body[data-scene="1"] .river{height:40%}
+body[data-scene="2"] .river,body[data-scene="3"] .river,body[data-scene="4"] .river{height:50%}
+.on-water{justify-content:flex-end;padding-bottom:calc(env(safe-area-inset-bottom) + 20px)}
+.on-water .lead{margin-bottom:auto;padding-top:5vh}
+.on-water .title{margin-top:5vh}
+.pier{width:min(88vw,320px);height:auto;display:block;margin-top:-6px}
+.pads{position:absolute;bottom:3%;width:clamp(90px,26vw,150px);animation:bob 5s ease-in-out infinite}
+.pads svg{width:100%;display:block}.pads.left{left:2%}.pads.right{right:3%;animation-delay:-2s}
+.preview svg{animation:bobwater 4s ease-in-out infinite}
+@keyframes bobwater{50%{transform:translateY(5px) rotate(.8deg)}}
+.swap{animation:swap .7s ease-out}
+@keyframes swap{from{opacity:0;transform:translateY(16px) scale(.9)}}
+.krathong-name{font-weight:700;font-size:1.2rem;color:var(--gold);text-shadow:0 2px 10px rgba(28,35,82,.8)}
+.theme-chip{width:84px;height:84px;padding:6px;border-radius:50%;border:3px solid transparent;background:rgba(255,243,224,.22);cursor:pointer}
+.theme-chip[aria-pressed=true]{border-color:var(--gold);background:rgba(255,243,224,.5)}
+.theme-chip svg{width:100%;height:100%;display:block}
+
+@media (max-height:640px){.title{font-size:2rem}.preview{width:170px}.preview.big{width:210px}.floater{margin-top:4vh}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
