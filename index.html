@@ -66,7 +66,7 @@
       <div id="wishEdit">
         <h2 class="wish-title">คืนนี้เธอมีอะไรอยากอธิษฐานไหม?</h2>
         <p class="wish-desc">จะเขียนความฝัน คำอธิษฐาน หรือข้อความอะไรก็ได้ หรือถ้าอยากเก็บไว้ในใจก็ไม่เป็นไรนะ ♡</p>
-        <textarea id="wishInput" maxlength="300" rows="5" placeholder="เขียนคำอธิษฐานของเธอไว้ตรงนี้..." aria-label="คำอธิษฐาน"></textarea>
+        <textarea id="wishInput" maxlength="300" rows="3" placeholder="เขียนคำอธิษฐานของเธอไว้ตรงนี้..." aria-label="คำอธิษฐาน"></textarea>
         <p class="counter"><span id="wishCount">0</span>/300</p>
       </div>
       <div id="wishPreview" hidden>
@@ -96,16 +96,19 @@
     </div>
     <button class="envelope" id="envelope" aria-label="เปิดซองจดหมาย">
       <span class="env-back"></span>
-      <span class="letter">
-        <b>ถึงเธอ</b>
-        ขอให้ปีนี้ใจเธอเบาสบาย ยิ้มได้บ่อย ๆ<br>
-        เหนื่อยเมื่อไรก็พักได้เสมอ<br>
-        ขอบคุณที่เป็นคนน่ารักของใครหลายคน<br>
-        ขอให้ทุกอย่างดีกับเธอนะ 🌙
-      </span>
+      <span class="letter"><b>ถึงเธอ</b>มีคำอธิษฐานเล็ก ๆ<br>ฝากไว้ให้เธอ ♡</span>
       <span class="env-front"></span><span class="env-flap"></span>
     </button>
     <p class="hint" id="envHint">แตะซองจดหมายเพื่อเปิด</p>
+    <article class="letter-sheet" id="letterSheet" hidden>
+      <h2>🌷 A Little Wish – คำอธิษฐานในคืนพระจันทร์</h2>
+      <p>ในค่ำคืนที่พระจันทร์ส่องแสงสวยงามแบบนี้</p>
+      <p>ขอให้เธอมีแต่เรื่องราวดี ๆ เข้ามาในชีวิต<br>ขอให้ทุกวันที่เหนื่อย มีเรื่องเล็ก ๆ ให้ยิ้มได้เสมอ<br>ขอให้ความฝันที่ตั้งใจไว้ ค่อย ๆ กลายเป็นความจริง<br>ขอให้สุขภาพแข็งแรง มีคนดี ๆ อยู่รอบตัว<br>และไม่ว่าจะเจอเรื่องอะไร ขอให้เธอผ่านมันไปได้อย่างเข้มแข็ง</p>
+      <p>ขอให้โลกใจดีกับเธอเยอะ ๆ<br>ขอให้มีความสุขกับสิ่งเล็ก ๆ ในทุกวัน<br>ได้กินของอร่อย ได้ไปในที่ที่อยากไป<br>ได้พบเจอเรื่องราวใหม่ ๆ ที่ทำให้หัวใจพองโต</p>
+      <p>สุดท้ายนี้...<br>ขอให้รอยยิ้มของเธอเกิดขึ้นได้ง่าย ๆ ในทุกวัน<br>และขอให้มีความสุขมากกว่าที่เคยเป็นนะ ♡</p>
+      <p>สุขสันต์วันลอยกระทง 🌕🪷</p>
+    </article>
+    <p class="hint" id="scrollHint" hidden>เลื่อนอ่านต่อได้นะ ↓</p>
     <button class="btn ghost" id="replayBtn" hidden>เล่นอีกครั้ง</button>
   </section>
 </main>

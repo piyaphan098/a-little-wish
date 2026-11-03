@@ -88,7 +88,7 @@ function onEnter(i) {
     $('finalText').textContent = state.wish;   // textContent กันโค้ดแปลกปลอม
     $('wishFinal').hidden = !has;
     $('envelope').hidden = has; $('envHint').hidden = has;
-    $('envelope').classList.remove('open'); $('replayBtn').hidden = has;
+    $('envelope').classList.remove('open'); $('replayBtn').hidden = true; $('letterSheet').hidden = true; $('scrollHint').hidden = true;
   }
 }
 function renderPreview(animate) {
@@ -144,8 +144,12 @@ $('releaseBtn').onclick = e => {
 };
 // Scene 6: เปิดซอง / เล่นใหม่
 $('envelope').onclick = () => {
+  if ($('envelope').classList.contains('open')) return;          // กันกดซ้ำ
   $('envelope').classList.add('open'); $('envHint').hidden = true;
-  setTimeout(() => { $('replayBtn').hidden = false; }, 1600);
+  setTimeout(() => {                                             // ซองเปิดเสร็จ -> แสดงจดหมายฉบับเต็มให้อ่าน
+    $('envelope').hidden = true; $('letterSheet').hidden = false; $('letterSheet').scrollTop = 0; $('scrollHint').hidden = false;
+    setTimeout(() => { $('replayBtn').hidden = false; }, 900);
+  }, 2000);
 };
 $('replayBtn').onclick = () => {
   state.wish = ''; $('wishInput').value = ''; $('wishCount').textContent = '0';
@@ -174,3 +178,5 @@ $('editWish').onclick = () => setWishMode('edit');
 $('confirmWish').onclick = () => { state.wish = $('wishInput').value.trim(); sendWishAndContinue(['confirmWish','editWish']); };
 $('keepWish').onclick = () => { state.wish = ''; sendWishAndContinue(['saveWish','keepWish']); };
 $('toLetter').onclick = () => { $('wishFinal').hidden = true; $('envelope').hidden = false; $('envHint').hidden = false; };
+
+$('letterSheet').addEventListener('scroll', () => { $('scrollHint').hidden = true; }, {passive: true});   // อ่านเลื่อนแล้วไม่ต้องบอกใบ้อีก

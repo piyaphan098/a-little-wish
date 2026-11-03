@@ -98,7 +98,7 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 
 /* ---------- My Little Wish: การ์ดคำอธิษฐาน ---------- */
 [hidden]{display:none!important}
-.wish-card{width:min(100%,380px);padding:20px 18px;border-radius:6px 18px 6px 18px;background:var(--cream);color:var(--night);
+.wish-card{width:min(100%,330px);padding:14px 16px;border-radius:6px 18px 6px 18px;background:var(--cream);color:var(--night);
   box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 0 0 3px var(--pink);transform:rotate(-1.2deg);animation:cardIn .8s ease-out}
 @keyframes cardIn{from{opacity:0;transform:translateY(24px) rotate(-3deg)}}
 .wish-title{font-size:clamp(1.15rem,4.8vw,1.4rem);line-height:1.5}
@@ -107,7 +107,7 @@ body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
   font:400 16px/1.6 'Mali',sans-serif}
 #wishInput:focus{outline:none;border-color:var(--pink-d)}
 .counter{text-align:right;font-size:.8rem;opacity:.7;margin-top:4px}
-.wish-text{white-space:pre-wrap;overflow-wrap:anywhere;max-height:34vh;overflow-y:auto;text-align:left;font-size:1.05rem;line-height:1.7;
+.wish-text{white-space:pre-wrap;overflow-wrap:anywhere;max-height:24vh;overflow-y:auto;text-align:left;font-size:1.05rem;line-height:1.7;
   padding:10px;background:#fffaf1;border-radius:12px}
 .wish-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 .wish-card.final{margin-bottom:18px}
@@ -153,5 +153,13 @@ body[data-scene="2"] .river,body[data-scene="3"] .river,body[data-scene="4"] .ri
 .moon{animation:moonglow 9s ease-in-out infinite}
 @keyframes moonglow{50%{box-shadow:0 0 90px 36px rgba(255,226,170,.5),0 0 200px 80px rgba(255,194,214,.3)}}
 .lantern:nth-of-type(1){animation-duration:8.5s}.lantern:nth-of-type(2){animation-duration:6.4s}.lantern:nth-of-type(3){animation-duration:9.6s}.lantern:nth-of-type(4){animation-duration:7.3s}
+
+/* ---------- จดหมายคำอวยพร ---------- */
+.letter-sheet{width:min(100%,380px);max-height:60vh;overflow-y:auto;padding:20px 12px;scrollbar-width:thin;background:var(--cream);color:var(--night);
+  border-radius:6px 20px 6px 20px;box-shadow:0 12px 34px rgba(0,0,0,.4),inset 0 0 0 3px var(--lav);text-align:center;line-height:1.95}
+.letter-sheet h2{font-size:1.05rem;line-height:1.6;margin-bottom:14px;color:#a35a84}
+.letter-sheet p{font-size:.92rem;margin-bottom:12px}
+.letter-sheet p:last-child{margin-bottom:0;font-weight:700}
+.scene.active>.letter-sheet{animation-delay:.1s!important}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
