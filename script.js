@@ -15,7 +15,7 @@ const BEAR_SVG = `<svg class="bear" viewBox="0 0 120 130" aria-hidden="true">
 <circle cx="28" cy="26" r="8" fill="#ffc2d6"/><circle cx="92" cy="26" r="8" fill="#ffc2d6"/>
 <ellipse cx="60" cy="100" rx="34" ry="28" fill="#e7b98f"/><ellipse cx="60" cy="104" rx="20" ry="18" fill="#fff3e0"/>
 <circle cx="60" cy="52" r="38" fill="#f0c9a3"/><ellipse cx="60" cy="64" rx="17" ry="13" fill="#fff3e0"/>
-<circle cx="46" cy="48" r="4" fill="#1c2352"/><circle cx="74" cy="48" r="4" fill="#1c2352"/>
+<g class="eyes"><circle cx="46" cy="48" r="4" fill="#1c2352"/><circle cx="74" cy="48" r="4" fill="#1c2352"/></g>
 <ellipse cx="60" cy="60" rx="5" ry="3.5" fill="#1c2352"/><path d="M52 68q8 7 16 0" stroke="#1c2352" stroke-width="2.5" fill="none" stroke-linecap="round"/>
 <circle cx="36" cy="62" r="6" fill="#ffb3cf" opacity=".7"/><circle cx="84" cy="62" r="6" fill="#ffb3cf" opacity=".7"/></svg>`;
 
@@ -44,7 +44,7 @@ function krathongSVG(lit, theme = choice.theme, ripple = true) {
     ${grad('b', t.p[1], t.p[2])}${grad('m', t.p[0], t.p[1])}${grad('f', t.p[0], t.p[1])}${grad('l', '#a9dcae', '#6db08c')}
     <linearGradient id="${id}c" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${t.candle}"/><stop offset="1" stop-color="#d8c2bd"/></linearGradient>
     <radialGradient id="${id}g"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".8"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient></defs>
-    ${ripple ? '<ellipse cx="120" cy="170" rx="100" ry="10" fill="rgba(20,15,60,.35)"/><ellipse cx="120" cy="174" rx="116" ry="11" fill="none" stroke="rgba(255,255,255,.35)"/><ellipse cx="120" cy="176" rx="92" ry="8" fill="none" stroke="rgba(255,255,255,.25)"/>' : ''}
+    ${ripple ? '<ellipse cx="120" cy="170" rx="100" ry="10" fill="rgba(20,15,60,.35)"/><ellipse class="ring" cx="120" cy="174" rx="116" ry="11" fill="none" stroke="rgba(255,255,255,.45)"/><ellipse class="ring r2" cx="120" cy="176" rx="92" ry="8" fill="none" stroke="rgba(255,255,255,.35)"/>' : ''}
     ${lit ? `<circle class="glow" cx="120" cy="90" r="100" fill="url(#${id}g)"/>` : ''}
     <ellipse cx="120" cy="150" rx="104" ry="26" fill="url(#${id}l)"/><ellipse cx="120" cy="146" rx="96" ry="22" fill="none" stroke="#d3efcf" stroke-width="3" stroke-dasharray="10 8"/>
     ${row([-72,-48,-24,0,24,48,72], 1, `url(#${id}b)`)}${row([-56,-28,0,28,56], .86, `url(#${id}m)`)}
@@ -119,6 +119,7 @@ document.querySelectorAll('[data-bear]').forEach(el => { el.outerHTML = BEAR_SVG
 document.querySelectorAll('[data-pier]').forEach(el => { el.outerHTML = PIER_SVG; });
 document.querySelectorAll('[data-pads]').forEach(el => { el.innerHTML = PADS_SVG; });
 buildThemeChoices();
+scenes.forEach(s => [...s.children].forEach((el, k) => el.style.setProperty('--i', k)));   // ลำดับการปรากฏของแต่ละชิ้น
 const starBox = $('stars');
 for (let i = 0; i < 45; i++) {      // สร้างดาวสุ่มตำแหน่ง
   const s = document.createElement('i'); s.className = 'star';
