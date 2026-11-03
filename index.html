@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Little Wish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ฉากหลังคงที่: ท้องฟ้า พระจันทร์ แม่น้ำ -->
+<div class="backdrop" aria-hidden="true">
+  <div class="stars" id="stars"></div>
+  <div class="moon"></div>
+  <div class="river"><div class="shimmer"></div></div>
+</div>
+
+<main class="stage">
+  <!-- Scene 1: Welcome -->
+  <section class="scene active" data-scene="0">
+    <h1 class="title">A Little Wish</h1>
+    <p class="sub">ของขวัญเล็ก ๆ ในคืนลอยกระทง</p>
+    <div class="bear-wrap"><span data-bear></span>
+      <svg class="gift" id="gift" viewBox="0 0 160 140" aria-hidden="true">
+        <g class="gift-lid"><rect x="12" y="34" width="136" height="30" rx="8" fill="#ffb3cf"/><rect x="72" y="34" width="16" height="30" fill="#fff3e0"/>
+          <path d="M80 34c-30-26-46 4-10 4zM80 34c30-26 46 4 10 4z" fill="#fff3e0"/></g>
+        <rect x="22" y="64" width="116" height="68" rx="8" fill="#ff9ec1"/><rect x="72" y="64" width="16" height="68" fill="#fff3e0"/>
+      </svg>
+    </div>
+    <button class="btn" id="openGift">เปิดของขวัญ</button>
+  </section>
+
+  <!-- Scene 2: Riverside -->
+  <section class="scene" data-scene="1" hidden>
+    <p class="lead">คืนนี้พระจันทร์สวยจัง<br>ริมแม่น้ำมีโคมไฟและดอกไม้รออยู่</p>
+    <div class="lanterns" aria-hidden="true"><span>🏮</span><span>🪷</span><span>🏮</span></div>
+    <span data-bear></span>
+    <button class="btn" data-go="2">มาเริ่มทำกระทงกัน</button>
+  </section>
+
+  <!-- Scene 3: Create Krathong -->
+  <section class="scene" data-scene="2" hidden>
+    <div class="preview" id="preview1"></div>
+    <div class="panel">
+      <p class="label">รูปแบบกระทง</p>
+      <div class="choices" id="chooseBase"></div>
+      <p class="label">ดอกไม้ตกแต่ง</p>
+      <div class="choices" id="chooseFlower"></div>
+      <p class="label">สีเทียน</p>
+      <div class="choices" id="chooseCandle"></div>
+    </div>
+    <button class="btn" data-go="3">เสร็จแล้ว</button>
+  </section>
+
+  <!-- Scene 4: Light Candle -->
+  <section class="scene" data-scene="3" hidden>
+    <p class="lead" id="candleText">กระทงของเธอพร้อมแล้ว<br>ลองจุดเทียนดูนะ</p>
+    <div class="preview big" id="preview2"></div>
+    <button class="btn" id="lightBtn">จุดเทียน</button>
+  </section>
+
+  <!-- Scene 5: Floating -->
+  <section class="scene" data-scene="4" hidden>
+    <p class="lead">กระทงกำลังลอยไปช้า ๆ</p>
+    <div class="floater" id="floater"></div>
+    <p class="wish-toast" id="wishToast" aria-live="polite"></p>
+    <button class="btn" id="releaseBtn">ปล่อยคำอธิษฐาน</button>
+  </section>
+
+  <!-- Scene 5.5: My Little Wish -->
+  <section class="scene" data-scene="5" hidden>
+    <div class="wish-card">
+      <div id="wishEdit">
+        <h2 class="wish-title">คืนนี้เธอมีอะไรอยากอธิษฐานไหม?</h2>
+        <p class="wish-desc">จะเขียนความฝัน คำอธิษฐาน หรือข้อความอะไรก็ได้ หรือถ้าอยากเก็บไว้ในใจก็ไม่เป็นไรนะ ♡</p>
+        <textarea id="wishInput" maxlength="300" rows="5" placeholder="เขียนคำอธิษฐานของเธอไว้ตรงนี้..." aria-label="คำอธิษฐาน"></textarea>
+        <p class="counter"><span id="wishCount">0</span>/300</p>
+      </div>
+      <div id="wishPreview" hidden>
+        <p class="wish-desc">อ่านอีกครั้งก่อนฝากไว้กับสายน้ำนะ</p>
+        <p class="wish-text" id="wishPreviewText"></p>
+      </div>
+    </div>
+    <div class="wish-actions" id="actEdit">
+      <button class="btn" id="saveWish">ฝากคำอธิษฐาน 🌷</button>
+      <button class="btn ghost" id="keepWish">ขอเก็บไว้ในใจ 🌙</button>
+    </div>
+    <div class="wish-actions" id="actPreview" hidden>
+      <button class="btn" id="confirmWish">ยืนยัน ฝากเลย 🌷</button>
+      <button class="btn ghost" id="editWish">กลับไปแก้ไข</button>
+    </div>
+  </section>
+
+  <!-- Scene 6: Little Wish -->
+  <section class="scene" data-scene="6" hidden>
+    <div id="wishFinal" hidden>
+      <div class="wish-card final">
+        <p class="wish-desc">คำอธิษฐานของเธอ</p>
+        <p class="wish-text" id="finalText"></p>
+        <p class="wish-desc">ลอยไปกับสายน้ำเรียบร้อยแล้ว ♡</p>
+      </div>
+      <button class="btn" id="toLetter">อ่านจดหมายอวยพร</button>
+    </div>
+    <button class="envelope" id="envelope" aria-label="เปิดซองจดหมาย">
+      <span class="env-back"></span>
+      <span class="letter">
+        <b>ถึงเธอ</b>
+        ขอให้ปีนี้ใจเธอเบาสบาย ยิ้มได้บ่อย ๆ<br>
+        เหนื่อยเมื่อไรก็พักได้เสมอ<br>
+        ขอบคุณที่เป็นคนน่ารักของใครหลายคน<br>
+        ขอให้ทุกอย่างดีกับเธอนะ 🌙
+      </span>
+      <span class="env-front"></span><span class="env-flap"></span>
+    </button>
+    <p class="hint" id="envHint">แตะซองจดหมายเพื่อเปิด</p>
+    <button class="btn ghost" id="replayBtn" hidden>เล่นอีกครั้ง</button>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+:root{--pink:#ffc2d6;--pink-d:#ff9ec1;--cream:#fff3e0;--lav:#d9c8f5;--blue:#a9d4f5;--night:#1c2352;--night2:#3a3f7a}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Mali','Sarabun',sans-serif;color:var(--cream);background:var(--night)}
+
+/* ---------- ฉากหลัง ---------- */
+.backdrop{position:fixed;inset:0;background:linear-gradient(var(--night) 0%,var(--night2) 62%,#6a5fa8 100%)}
+.stars{position:absolute;inset:0 0 35% 0}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cream);animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.2;transform:scale(.6)}}
+.moon{position:absolute;top:7%;right:10%;width:clamp(70px,20vmin,130px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fffaf0,#ffe9c7);box-shadow:0 0 60px 20px rgba(255,236,200,.35)}
+.river{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(#4a4f94,#262c63);overflow:hidden}
+.shimmer{position:absolute;top:0;right:12%;width:90px;height:100%;
+  background:repeating-linear-gradient(transparent 0 8px,rgba(255,236,200,.45) 8px 11px);
+  mask:linear-gradient(#000,transparent);-webkit-mask:linear-gradient(#000,transparent);animation:wave 4s ease-in-out infinite alternate}
+@keyframes wave{to{transform:translateX(-14px) scaleX(1.2)}}
+
+/* ---------- Scene & Transition ---------- */
+.stage{position:fixed;inset:0;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2.4vh,22px);
+  padding:16px 20px;text-align:center;opacity:0;transform:scale(.97);transition:opacity .5s,transform .5s;pointer-events:none;overflow-y:auto}
+.scene.active{opacity:1;transform:none;pointer-events:auto}
+.scene[hidden]{display:none}
+.title{font-size:clamp(2.2rem,9vw,3.6rem);color:var(--pink);text-shadow:0 0 24px rgba(255,194,214,.6)}
+.sub,.hint{opacity:.85}
+.lead{font-size:clamp(1.1rem,4.4vw,1.5rem);line-height:1.7;max-width:22em}
+
+/* ---------- ปุ่ม ---------- */
+.btn{min-height:52px;padding:12px 30px;border:0;border-radius:999px;font:700 1.1rem 'Mali',sans-serif;color:var(--night);
+  background:linear-gradient(var(--cream),var(--pink));box-shadow:0 6px 0 var(--pink-d),0 10px 24px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--pink-d)}
+.btn:disabled{opacity:.6;pointer-events:none}
+.btn.ghost{background:var(--lav);box-shadow:0 6px 0 #b9a4e3}
+.btn[hidden]{display:none}
+
+/* ---------- หมี & ของขวัญ ---------- */
+.bear{width:clamp(110px,28vmin,170px);animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.bear-wrap{display:flex;align-items:flex-end;justify-content:center;gap:8px}
+.gift{width:clamp(110px,30vmin,170px)}
+.gift-lid{transform-origin:20% 60%;transition:transform .9s cubic-bezier(.3,1.4,.5,1)}
+.gift.open .gift-lid{transform:translateY(-34px) rotate(-26deg)}
+.gift.open{animation:pop .9s}
+@keyframes pop{40%{transform:scale(1.12)}}
+.lanterns{display:flex;gap:26px;font-size:2.4rem}
+.lanterns span{animation:bob 3.4s ease-in-out infinite}.lanterns span:nth-child(2){animation-delay:.6s}.lanterns span:nth-child(3){animation-delay:1.2s}
+
+/* ---------- สร้างกระทง ---------- */
+.preview{width:clamp(150px,42vw,230px);filter:drop-shadow(0 8px 14px rgba(0,0,0,.3))}
+.preview.big{width:clamp(220px,64vw,340px)}
+.preview svg,.floater svg{width:100%;height:auto;display:block}
+.panel{width:min(100%,420px);background:rgba(255,243,224,.14);border-radius:22px;padding:12px 14px;backdrop-filter:blur(4px)}
+.label{font-weight:700;font-size:.95rem;margin:4px 0}
+.choices{display:flex;gap:10px;justify-content:center;margin-bottom:6px}
+.chip{min-width:56px;min-height:48px;padding:4px 12px;border:3px solid transparent;border-radius:16px;font:600 .95rem 'Mali',sans-serif;
+  background:var(--cream);color:var(--night);cursor:pointer}
+.chip[aria-pressed=true]{border-color:var(--pink-d);background:var(--pink)}
+.swatch{width:48px;padding:0}
+
+/* ---------- เปลวเทียน & แสง ---------- */
+.flame{transform-origin:50% 100%;animation:flicker 1.1s ease-in-out infinite alternate}
+@keyframes flicker{from{transform:scale(1,.9) rotate(-3deg)}to{transform:scale(.9,1.1) rotate(3deg)}}
+.glow{animation:breathe 2.4s ease-in-out infinite alternate}
+@keyframes breathe{to{opacity:.65}}
+.lit-in{animation:ignite .8s ease-out}
+@keyframes ignite{from{opacity:0;transform:scale(.2)}}
+
+/* ---------- กระทงลอย ---------- */
+.floater{width:clamp(150px,40vw,210px);margin-top:12vh;animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-26vw) rotate(-2deg)}50%{transform:translateX(0) translateY(6px) rotate(2deg)}to{transform:translateX(26vw) rotate(-2deg)}}
+.wish-toast{min-height:3.2em;font-size:1.15rem;color:var(--pink);opacity:0;transition:opacity .6s}
+.wish-toast.show{opacity:1}
+
+/* ---------- ซองจดหมาย ---------- */
+.envelope{position:relative;width:min(80vw,300px);height:min(54vw,200px);margin-top:10vh;border:0;background:none;cursor:pointer;font-family:inherit}
+.envelope span{position:absolute;display:block}
+.env-back,.env-front{inset:0;border-radius:12px}
+.env-back{background:var(--lav)}
+.env-front{background:linear-gradient(135deg,transparent 50%,var(--pink) 50%) left/50% 100% no-repeat,linear-gradient(225deg,transparent 50%,var(--pink) 50%) right/50% 100% no-repeat,linear-gradient(var(--pink),var(--pink)) bottom/100% 40% no-repeat}
+.env-flap{left:0;right:0;top:0;height:60%;background:var(--pink-d);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .7s}
+.letter{left:6%;right:6%;top:8%;height:84%;padding:10px;background:var(--cream);color:var(--night);border-radius:8px;font-size:.85rem;line-height:1.55;
+  text-align:center;transition:transform .9s .5s,height .9s .5s;display:flex!important;flex-direction:column;justify-content:center;overflow:hidden}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:0}
+.envelope.open .letter{transform:translateY(-62%);height:auto;min-height:100%;padding:16px 10px;z-index:3;font-size:clamp(.95rem,3.8vw,1.1rem);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.envelope .env-front{z-index:2}.envelope .env-flap{z-index:3}.envelope.open .env-flap{z-index:1}
+
+/* ---------- My Little Wish: การ์ดคำอธิษฐาน ---------- */
+[hidden]{display:none!important}
+.wish-card{width:min(100%,380px);padding:20px 18px;border-radius:6px 18px 6px 18px;background:var(--cream);color:var(--night);
+  box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 0 0 3px var(--pink);transform:rotate(-1.2deg);animation:cardIn .8s ease-out}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) rotate(-3deg)}}
+.wish-title{font-size:clamp(1.15rem,4.8vw,1.4rem);line-height:1.5}
+.wish-desc{font-size:.9rem;line-height:1.6;margin:6px 0 10px;opacity:.8}
+#wishInput{width:100%;resize:none;padding:12px;border:2px dashed var(--lav);border-radius:12px;background:#fffaf1;color:var(--night);
+  font:400 16px/1.6 'Mali',sans-serif}
+#wishInput:focus{outline:none;border-color:var(--pink-d)}
+.counter{text-align:right;font-size:.8rem;opacity:.7;margin-top:4px}
+.wish-text{white-space:pre-wrap;overflow-wrap:anywhere;max-height:34vh;overflow-y:auto;text-align:left;font-size:1.05rem;line-height:1.7;
+  padding:10px;background:#fffaf1;border-radius:12px}
+.wish-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.wish-card.final{margin-bottom:18px}
+#wishFinal{display:flex;flex-direction:column;align-items:center;animation:cardIn .8s ease-out}
+.wish-card.sending{transition:transform .9s ease-in,opacity .9s;transform:translateY(-40px) scale(.9);opacity:0}
+
+@media (max-height:640px){.title{font-size:2rem}.preview{width:120px}.floater{margin-top:4vh}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
