@@ -1,9 +1,9 @@
 'use strict';
 /* ====== กระทง 3 แบบ (สี กลีบ ดอกไม้ และเทียนของแต่ละแบบ) ====== */
 const THEMES = {
-  pink:  {name:'Pink Blossom',   p:['#fff0f5','#ffc0d6','#ff93bb'], line:'#ff7fae', fl:['#ffffff','#ffd3e3','#ffffff','#ffd3e3','#ffffff'], candle:'#ffe9f1'},
-  moon:  {name:'Moonlight',      p:['#fffef8','#fff1d0','#f1d79a'], line:'#e2c27a', fl:['#ffffff','#fffbe9','#ffffff','#fffbe9','#ffffff'], candle:'#fff8e1'},
-  lav:   {name:'Lavender Dream', p:['#f4edff','#d3bff5','#a98be0'], line:'#977ad6', fl:['#ffd3e3','#cfe6ff','#ffe9a8','#cfe6ff','#ffd3e3'], candle:'#efe6ff'}
+  pink:  {name:'Pink Blossom',   p:['#fff0f5','#ffc0d6','#ff93bb'], line:'#ff7fae', trim:'#ff7fae', fl:['#ffffff','#ffd3e3','#ffffff','#ffd3e3','#ffffff'], candle:'#ffe9f1'},
+  moon:  {name:'Moonlight',      p:['#fffef8','#fff1d0','#f1d79a'], line:'#e2c27a', trim:'#e8b94f', fl:['#ffffff','#fffbe9','#ffffff','#fffbe9','#ffffff'], candle:'#fff8e1'},
+  lav:   {name:'Lavender Dream', p:['#f4edff','#d3bff5','#a98be0'], line:'#977ad6', trim:'#8f6fd8', fl:['#ffd3e3','#cfe6ff','#ffe9a8','#cfe6ff','#ffd3e3'], candle:'#efe6ff'}
 };
 /* State: เก็บคำอธิษฐานไว้ในหน่วยความจำของหน้าเว็บเท่านั้น (ไม่ส่งไปที่ไหน) */
 const state = {wish: ''};
@@ -29,28 +29,47 @@ const PADS_SVG = `<svg viewBox="0 0 160 70" aria-hidden="true"><ellipse cx="40" 
 <ellipse cx="116" cy="60" rx="27" ry="7" fill="#5fa37f"/><g transform="translate(80 54)" fill="#ffd3e3" stroke="#ff93bb" stroke-width=".8">
 <path d="M0 0C-9-6-9-22 0-30 9-22 9-6 0 0Z" transform="rotate(-28) scale(.8)"/><path d="M0 0C-9-6-9-22 0-30 9-22 9-6 0 0Z" transform="rotate(28) scale(.8)"/><path d="M0 0C-9-6-9-22 0-30 9-22 9-6 0 0Z"/></g></svg>`;
 
-/* ====== SVG: กระทงดอกบัวซ้อนกลีบ (theme = pink/moon/lav, lit = จุดเทียนแล้ว) ====== */
+/* ====== SVG: กระทงไทยมุมมอง 3/4 ======
+   โครงสร้าง: ฐานหยวกกล้วย -> ใบตองพับเป็นกลีบแหลม 2 ชั้น -> ดอกบัว -> เทียน + ธูป -> ดอกมะลิประดับ
+   3 แบบใช้โครงเดียวกัน ต่างกันที่สีกลีบบัว สีดอกไม้ และสีขอบประดับ */
 let svgCount = 0;                     // ทำให้ id ของ gradient ไม่ซ้ำกันเมื่อมีหลายภาพในหน้าเดียว
 function krathongSVG(lit, theme = choice.theme, ripple = true) {
-  const t = THEMES[theme], id = 'k' + (svgCount++);
+  const t = THEMES[theme], id = 'k' + (svgCount++), f = n => n.toFixed(1);
   const petal = 'M0 0C-20 -14 -20 -52 0 -70C20 -52 20 -14 0 0Z';
   const row = (angles, scale, fill) => angles.map(a =>
-    `<path d="${petal}" transform="translate(120 142) rotate(${a}) scale(${scale})" fill="${fill}" stroke="${t.line}" stroke-width=".9"/>`).join('');
+    `<path d="${petal}" transform="translate(120 118) rotate(${a}) scale(${scale})" fill="${fill}" stroke="${t.line}" stroke-width="${(.9 / scale).toFixed(2)}"/>`).join('');
+  // ใบตองพับเป็นกลีบแหลมเรียงรอบฐานวงรี (ครึ่งหลังวาดก่อน ครึ่งหน้าวาดทีหลัง)
+  const pleats = (cy, R, r, h, hw, n, c1, c2, front, dots) => {
+    const list = [];
+    for (let i = 0; i < n; i++) { const th = (i + .5) / n * Math.PI * 2; if ((Math.sin(th) > 0) === front) list.push(th); }
+    list.sort((a, b) => Math.abs(Math.cos(b)) - Math.abs(Math.cos(a)));      // ด้านข้างก่อน ตรงกลางทีหลัง
+    return list.map(th => {
+      const s = Math.sin(th), x = 120 + R * Math.cos(th), y = cy + r * s, w = hw * (.55 + .45 * Math.abs(s)), tx = x + .07 * R * Math.cos(th), ty = y - h;
+      return `<path d="M${f(x-w)} ${f(y)}L${f(tx)} ${f(ty)}L${f(x)} ${f(y+3)}Z" fill="${c1}" stroke="rgba(70,130,100,.4)" stroke-width=".5"/><path d="M${f(x)} ${f(y+3)}L${f(tx)} ${f(ty)}L${f(x+w)} ${f(y)}Z" fill="${c2}" stroke="rgba(70,130,100,.4)" stroke-width=".5"/>` +
+        (dots ? `<circle cx="${f(tx)}" cy="${f(ty)}" r="1.6" fill="${t.trim}"/>` : '');
+    }).join('');
+  };
   const flower = (x, y, c) => [0,72,144,216,288].map(a =>
-    `<ellipse cx="${x}" cy="${y-6}" rx="4.5" ry="7" fill="${c}" stroke="rgba(0,0,0,.1)" stroke-width=".5" transform="rotate(${a} ${x} ${y})"/>`).join('') + `<circle cx="${x}" cy="${y}" r="3" fill="#f6c96b"/>`;
-  const grad = (n, c1, c2) => `<linearGradient id="${id}${n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>`;
-  const spots = [[56,150],[90,160],[150,160],[184,150],[120,164]];
-  return `<svg viewBox="0 0 240 190" aria-label="กระทง ${t.name}"><defs>
-    ${grad('b', t.p[1], t.p[2])}${grad('m', t.p[0], t.p[1])}${grad('f', t.p[0], t.p[1])}${grad('l', '#a9dcae', '#6db08c')}
-    <linearGradient id="${id}c" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${t.candle}"/><stop offset="1" stop-color="#d8c2bd"/></linearGradient>
+    `<ellipse cx="${x}" cy="${y-6}" rx="5" ry="8" fill="${c}" stroke="rgba(0,0,0,.12)" stroke-width=".5" transform="rotate(${a} ${x} ${y})"/>`).join('') + `<circle cx="${x}" cy="${y}" r="3.2" fill="#f6c96b"/>`;
+  const grad = (n, c1, c2, h) => `<linearGradient id="${id}${n}" x1="0" y1="0" x2="${h ? 1 : 0}" y2="${h ? 0 : 1}"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>`;
+  const spots = [[62,158],[96,168],[144,168],[178,158],[120,173]];
+  const ember = (x, y) => `<circle cx="${x}" cy="${y}" r="2.2" fill="#ff9b6a"/>` + (lit ? `<circle class="glow" cx="${x}" cy="${y}" r="7" fill="#ffb27a" opacity=".45"/>` : '');
+  return `<svg viewBox="0 0 240 200" aria-label="กระทง ${t.name}"><defs>
+    ${grad('b', t.p[1], t.p[2])}${grad('m', t.p[0], t.p[1])}${grad('f', t.p[0], t.p[1])}${grad('t', '#f6f0cd', '#d8d0a4', true)}${grad('c', t.candle, '#d8c2bd', true)}
     <radialGradient id="${id}g"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".8"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient></defs>
-    ${ripple ? '<ellipse cx="120" cy="170" rx="100" ry="10" fill="rgba(20,15,60,.35)"/><ellipse class="ring" cx="120" cy="174" rx="116" ry="11" fill="none" stroke="rgba(255,255,255,.45)"/><ellipse class="ring r2" cx="120" cy="176" rx="92" ry="8" fill="none" stroke="rgba(255,255,255,.35)"/>' : ''}
-    ${lit ? `<circle class="glow" cx="120" cy="90" r="100" fill="url(#${id}g)"/>` : ''}
-    <ellipse cx="120" cy="150" rx="104" ry="26" fill="url(#${id}l)"/><ellipse cx="120" cy="146" rx="96" ry="22" fill="none" stroke="#d3efcf" stroke-width="3" stroke-dasharray="10 8"/>
-    ${row([-72,-48,-24,0,24,48,72], 1, `url(#${id}b)`)}${row([-56,-28,0,28,56], .86, `url(#${id}m)`)}
-    <rect x="112" y="76" width="16" height="60" rx="4" fill="url(#${id}c)"/><rect x="115" y="78" width="3" height="54" rx="1.5" fill="#fff" opacity=".45"/><path d="M120 76v-8" stroke="#6b4a3a" stroke-width="1.6" stroke-linecap="round"/>
-    ${lit ? '<g transform="translate(0 7)"><g class="lit-in"><g class="flame"><path d="M120 36c10 14 10 24 0 28-10-4-10-14 0-28z" fill="#ffd36e"/><path d="M120 46c5 7 5 12 0 14-5-2-5-7 0-14z" fill="#fff6d6"/></g></g></g>' : ''}
-    ${row([-36,-12,12,36], .66, `url(#${id}f)`)}
+    ${ripple ? '<ellipse cx="120" cy="184" rx="100" ry="9" fill="rgba(20,15,60,.35)"/>' : ''}
+    ${lit ? `<circle class="glow" cx="120" cy="64" r="100" fill="url(#${id}g)"/>` : ''}
+    <path d="M28 150v14a92 20 0 0 0 184 0v-14z" fill="url(#${id}t)"/><ellipse cx="120" cy="150" rx="92" ry="20" fill="#f8f3d6"/>
+    <ellipse cx="120" cy="150" rx="70" ry="15" fill="none" stroke="#e6dcb0" stroke-width=".8"/><ellipse cx="120" cy="150" rx="46" ry="10" fill="none" stroke="#e6dcb0" stroke-width=".8"/>
+    <ellipse cx="120" cy="150" rx="92" ry="20" fill="none" stroke="${t.trim}" stroke-width="1.6" stroke-dasharray="5 4" opacity=".85"/>
+    ${ripple ? '<ellipse class="ring" cx="120" cy="182" rx="112" ry="11" fill="none" stroke="rgba(255,255,255,.45)"/><ellipse class="ring r2" cx="120" cy="184" rx="90" ry="8" fill="none" stroke="rgba(255,255,255,.35)"/>' : ''}
+    ${pleats(138, 92, 20, 30, 16, 24, '#c9ecb8', '#8fcb9d', false, false)}${pleats(126, 60, 13, 28, 13, 18, '#dff5c8', '#a9d9a9', false, false)}
+    <path d="M104 110L88 46M138 110L154 42" stroke="#8a5a3a" stroke-width="2" stroke-linecap="round"/>${ember(88, 46)}${ember(154, 42)}
+    ${row([-72,-48,-24,0,24,48,72], .85, `url(#${id}b)`)}${row([-56,-28,0,28,56], .7, `url(#${id}m)`)}
+    <rect x="112" y="44" width="16" height="70" fill="url(#${id}c)"/><ellipse cx="120" cy="44" rx="8" ry="2.6" fill="#fff" opacity=".8"/><rect x="115" y="46" width="3" height="66" fill="#fff" opacity=".4"/><path d="M120 44v-8" stroke="#6b4a3a" stroke-width="1.6" stroke-linecap="round"/>
+    ${lit ? '<g transform="translate(0 -28)"><g class="lit-in"><g class="flame"><path d="M120 36c10 14 10 24 0 28-10-4-10-14 0-28z" fill="#ffd36e"/><path d="M120 46c5 7 5 12 0 14-5-2-5-7 0-14z" fill="#fff6d6"/></g></g></g>' : ''}
+    ${row([-36,-12,12,36], .55, `url(#${id}f)`)}
+    ${pleats(126, 60, 13, 28, 13, 18, '#dff5c8', '#a9d9a9', true, false)}${pleats(138, 92, 20, 30, 16, 24, '#c9ecb8', '#8fcb9d', true, true)}
     ${spots.map((s, i) => flower(s[0], s[1], t.fl[i])).join('')}</svg>`;
 }
 
@@ -77,8 +96,9 @@ function goTo(next) {
 function onEnter(i) {
   if (i === 2) renderPreview();
   if (i === 3) { $('preview2').innerHTML = krathongSVG(false); $('lightBtn').disabled = false; $('candleText').innerHTML = 'กระทงของเธอพร้อมแล้ว<br>ลองจุดเทียนดูนะ'; }
-  if (i === 4) { $('floater').innerHTML = krathongSVG(true); $('releaseBtn').disabled = false; $('wishToast').classList.remove('show'); }
-  if (i === 5) {                      // Scene คำอธิษฐาน: กลับมาที่โหมดเขียน (ข้อความเดิมยังอยู่)
+  if (i === 4) resetRiver();
+  if (i === 5) {                      // Scene คำอธิษฐาน (กล้องที่เงยขึ้นหาพระจันทร์ค่อย ๆ กลับลงมา)
+    setCam(null); riverScene.classList.remove('sky');   // กลับมาที่โหมดเขียน (ข้อความเดิมยังอยู่)
     setWishMode('edit');
     ['saveWish','keepWish','confirmWish','editWish'].forEach(id => { $(id).disabled = false; });
     document.querySelector('.wish-card').classList.remove('sending');
@@ -136,12 +156,6 @@ $('lightBtn').onclick = e => {
   $('candleText').innerHTML = 'อบอุ่นจัง ✨<br>แสงเล็ก ๆ ที่พร้อมเดินทางแล้ว';
   setTimeout(() => goTo(4), 2200);
 };
-// Scene 5: ปล่อยคำอธิษฐาน
-$('releaseBtn').onclick = e => {
-  e.currentTarget.disabled = true;
-  const t = $('wishToast'); t.innerHTML = 'ขอให้คำอธิษฐานของเธอ<br>ลอยไปถึงดวงจันทร์ 🌙'; t.classList.add('show');
-  setTimeout(() => goTo(5), 2800);
-};
 // Scene 6: เปิดซอง / เล่นใหม่
 $('envelope').onclick = () => {
   if ($('envelope').classList.contains('open')) return;          // กันกดซ้ำ
@@ -180,3 +194,40 @@ $('keepWish').onclick = () => { state.wish = ''; sendWishAndContinue(['saveWish'
 $('toLetter').onclick = () => { $('wishFinal').hidden = true; $('envelope').hidden = false; $('envHint').hidden = false; };
 
 $('letterSheet').addEventListener('scroll', () => { $('scrollHint').hidden = true; }, {passive: true});   // อ่านเลื่อนแล้วไม่ต้องบอกใบ้อีก
+
+/* ====== Scene 5: ระบบปล่อยกระทง (ลำดับเหตุการณ์ควบคุมด้วย class บน Scene + กล้องที่ body) ======
+   touch   = กระทงลดระดับลงแตะน้ำ + กล้องซูมเข้า
+   ripple  = เกิดวงคลื่นและเงาเทียนบนน้ำ
+   afloat  = กระทงลอยตัว โยกตามคลื่น
+   away    = ลอยห่างออกไป (เล็กลงตามระยะ) กล้องตามไป
+   sky     = กล้องเงยขึ้นหาพระจันทร์ แล้วเข้าสู่ My Little Wish */
+const riverScene = scenes[4];
+let riverTimers = [];
+const CAMS = ['cam-in', 'cam-follow', 'cam-sky'];
+function setCam(name) { document.body.classList.remove(...CAMS); if (name) document.body.classList.add(name); }
+function setRiverText(html) {
+  const el = $('riverText'); el.innerHTML = html;
+  el.classList.remove('fadein'); void el.offsetWidth; el.classList.add('fadein');
+}
+function resetRiver() {
+  riverTimers.forEach(clearTimeout); riverTimers = [];
+  riverScene.classList.remove('touch', 'ripple', 'afloat', 'away', 'sky'); setCam(null);
+  $('kBob').innerHTML = krathongSVG(true, choice.theme, false);
+  $('riverText').innerHTML = 'ค่อย ๆ วางกระทงลงบนผิวน้ำ<br>แล้วให้คำอธิษฐานของเธอลอยไปพร้อมกับสายน้ำ ♡';
+  $('wishToast').classList.remove('show'); $('releaseBtn').disabled = false;
+}
+$('releaseBtn').onclick = () => {
+  if ($('releaseBtn').disabled) return;                         // กันกดซ้ำ
+  $('releaseBtn').disabled = true;
+  const k = matchMedia('(prefers-reduced-motion: reduce)').matches ? .25 : 1;   // ลดการเคลื่อนไหว = ย่นเวลา
+  const at = (ms, fn) => riverTimers.push(setTimeout(fn, ms * k));
+  riverScene.classList.add('touch'); setCam('cam-in'); setRiverText('ค่อย ๆ วางลง… เบา ๆ นะ');
+  at(2600,  () => { riverScene.classList.add('ripple'); setRiverText('วงคลื่นแรกเกิดขึ้นแล้ว'); });
+  at(3400,  () => { riverScene.classList.add('afloat'); setRiverText('กระทงของเธอเริ่มลอยแล้ว…'); });
+  at(5400,  () => { riverScene.classList.add('away'); setCam('cam-follow'); setRiverText('ลอยไปไกล ๆ นะ'); });
+  at(10200, () => {
+    riverScene.classList.add('sky'); setCam('cam-sky');
+    setRiverText('ขอให้คำอธิษฐานของเธอ<br>ลอยไปถึงดวงจันทร์ 🌙');
+  });
+  at(14000, () => goTo(5));
+};

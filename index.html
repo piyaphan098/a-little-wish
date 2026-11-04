@@ -52,12 +52,20 @@
     <button class="btn" id="lightBtn">จุดเทียน</button>
   </section>
 
-  <!-- Scene 5: Floating -->
-  <section class="scene on-water" data-scene="4" hidden>
-    <p class="lead">กระทงกำลังลอยไปช้า ๆ</p>
-    <div class="floater" id="floater"></div>
+  <!-- Scene 5: ปล่อยกระทง (แยก Layer: ผู้ชม / กระทง / เงาสะท้อน / วงคลื่น / กล้อง) -->
+  <section class="scene on-water river-scene" data-scene="4" hidden>
+    <h2 class="title river-title">มาปล่อยกระทงกันนะ ♡</h2>
+    <p class="lead" id="riverText"></p>
+    <div class="k-cam" id="kCam">
+      <div class="watcher"><span data-bear></span><span data-pier></span></div>
+      <div class="k-wrap" id="kWrap">
+        <div class="k-reflect"></div>
+        <div class="k-bob" id="kBob"></div>
+        <div class="k-ripples"><i></i><i></i><i></i></div>
+      </div>
+    </div>
     <p class="wish-toast" id="wishToast" aria-live="polite"></p>
-    <button class="btn" id="releaseBtn">ปล่อยคำอธิษฐาน</button>
+    <button class="btn" id="releaseBtn">ปล่อยกระทง ›</button>
   </section>
 
   <!-- Scene 5.5: My Little Wish -->

@@ -7,7 +7,6 @@ body{font-family:'Mali','Sarabun',sans-serif;color:var(--cream);background:var(-
 .backdrop{position:fixed;inset:0;transform-origin:70% 60%;transition:transform 7s ease-out;
   background:linear-gradient(#1c2352 0%,#3a3f7a 26%,#7b5ea8 42%,#e69bbd 58%,#e69bbd 100%)}
 body[data-scene="1"] .backdrop{transform:scale(1.08)}   /* Scene 2: กล้องค่อย ๆ เคลื่อนเข้าหาแม่น้ำ */
-body[data-scene="4"] .backdrop{transform:scale(1.04) translateX(-1.5%)}
 .stars{position:absolute;inset:0 0 40% 0}
 .star{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cream);box-shadow:0 0 6px var(--gold);animation:twinkle 3s ease-in-out infinite}
 @keyframes twinkle{50%{opacity:.2;transform:scale(.6)}}
@@ -135,7 +134,7 @@ body[data-scene="2"] .river,body[data-scene="3"] .river,body[data-scene="4"] .ri
 @media (max-height:640px){.title{font-size:2rem}.preview{width:170px}.preview.big{width:210px}.floater{margin-top:4vh}}
 /* ---------- ความนุ่มนวล ---------- */
 /* ทุกอย่างใน Scene ค่อย ๆ ปรากฏทีละชิ้น (ลำดับตาม --i ที่ JS ใส่ให้) */
-.scene.active>:not(.floater):not(.wish-card):not(#wishFinal){animation:rise 1s var(--ease) backwards;animation-delay:calc(var(--i,0)*110ms + 120ms)}
+.scene.active>:not(.floater):not(.wish-card):not(#wishFinal):not(.k-cam){animation:rise 1s var(--ease) backwards;animation-delay:calc(var(--i,0)*110ms + 120ms)}
 @keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}}
 /* ปุ่มหลักมีแสงหายใจเบา ๆ ชวนให้กด */
 .btn::after{content:'';position:absolute;inset:-3px;border-radius:999px;box-shadow:0 0 22px 5px rgba(255,194,214,.65);opacity:0;pointer-events:none;animation:halo 3.6s ease-in-out 1.6s infinite}
@@ -161,5 +160,54 @@ body[data-scene="2"] .river,body[data-scene="3"] .river,body[data-scene="4"] .ri
 .letter-sheet p{font-size:.92rem;margin-bottom:12px}
 .letter-sheet p:last-child{margin-bottom:0;font-weight:700}
 .scene.active>.letter-sheet{animation-delay:.1s!important}
+
+/* ---------- น้ำมีชีวิต: คลื่นไกล (ละเอียด ช้า) / คลื่นใกล้ (ใหญ่ เร็ว) ---------- */
+.river::before,.river::after{content:'';position:absolute;left:0;right:0;pointer-events:none}
+.river::before{top:0;height:45%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='8'%3E%3Cpath d='M0 4Q15 0 30 4T60 4' fill='none' stroke='white' stroke-opacity='.4'/%3E%3C/svg%3E") 0 0/60px 8px repeat;--tw:60px;animation:flow 14s linear infinite;
+  mask:linear-gradient(transparent,#000);-webkit-mask:linear-gradient(transparent,#000)}
+.river::after{bottom:0;height:55%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='26'%3E%3Cpath d='M0 13Q40 3 80 13T160 13' fill='none' stroke='white' stroke-width='1.6' stroke-opacity='.3'/%3E%3C/svg%3E") 0 0/160px 26px repeat;--tw:160px;animation:flow 8s linear infinite;
+  mask:linear-gradient(#000 40%,transparent);-webkit-mask:linear-gradient(#000 40%,transparent)}
+@keyframes flow{to{background-position-x:var(--tw)}}
+
+/* ---------- กล้อง (เลื่อน/ซูม/เงย ฉากหลังทั้งชั้น) ---------- */
+.backdrop{transition:transform var(--cam-t,7s) ease-in-out;transform-origin:60% 62%}
+body.cam-in{--cam-t:2.6s}      body.cam-in .backdrop{transform:scale(1.14) translateY(-2%)}
+body.cam-follow{--cam-t:7s}    body.cam-follow .backdrop{transform:scale(1.14) translate(-3%,-2%)}
+body.cam-sky{--cam-t:3.8s}     body.cam-sky .backdrop{transform:scale(1.2) translateY(17%)}
+body.cam-sky .star{animation-duration:1.4s;box-shadow:0 0 10px 2px var(--gold)}
+
+/* ---------- Scene 5: ชั้นต่าง ๆ ---------- */
+.river-title{font-size:clamp(1.7rem,7vw,2.4rem)}
+.k-cam{position:absolute;inset:0;pointer-events:none;transition:transform 3.8s ease-in-out}
+.river-scene.sky .k-cam{transform:translateY(17vh)}
+.river-scene.sky .btn{opacity:0;transition:opacity 1.2s}
+.river-scene.touch .btn{opacity:0;pointer-events:none;transition:opacity .6s}
+.watcher{position:absolute;left:0;bottom:13vh;width:min(44vw,190px)}
+.watcher .bear{width:100%}.watcher .pier{width:150%;margin-left:-35%}
+.k-wrap{--kw:clamp(220px,64vw,320px);position:absolute;left:60%;top:76%;width:var(--kw);margin-left:calc(var(--kw)/-2);margin-top:calc(var(--kw)*-.75);transform-origin:50% 90%}
+.k-bob{transform:translateY(calc(var(--kw)*-.24));animation:held 3.6s ease-in-out infinite}   /* ถือไว้เหนือน้ำ */
+.k-bob svg{display:block;width:100%;overflow:visible}
+@keyframes held{50%{transform:translateY(calc(var(--kw)*-.24 - 5px)) rotate(1.2deg)}}
+.river-scene.touch .k-wrap{animation:zoomin 2.6s ease-in-out forwards}
+@keyframes zoomin{to{transform:translate(0,0) scale(1.12)}}
+.river-scene.touch .k-bob{animation:lower 2.6s cubic-bezier(.45,0,.35,1) forwards}               /* ลดระดับลงแตะน้ำ */
+@keyframes lower{from{transform:translateY(calc(var(--kw)*-.24))}to{transform:translateY(0)}}
+.river-scene.afloat .k-bob{animation:sway 5.2s ease-in-out infinite}                              /* โยกตามคลื่น */
+@keyframes sway{0%,100%{transform:translateY(0) rotate(0) scaleX(1)}25%{transform:translateY(-4px) rotate(2.4deg) scaleX(.97)}50%{transform:translateY(1px) rotate(0) scaleX(1)}75%{transform:translateY(-3px) rotate(-2.4deg) scaleX(.975)}}
+.river-scene.away .k-wrap{animation:away 7s cubic-bezier(.25,.6,.35,1) forwards}                  /* ลอยห่าง: เล็กลงตามระยะ */
+@keyframes away{from{transform:translate(0,0) scale(1.12)}to{transform:translate(11vw,-17vh) scale(.2)}}
+.k-ripples{position:absolute;left:50%;top:90%}
+.k-ripples i{position:absolute;left:0;top:0;width:calc(var(--kw)*1.3);height:calc(var(--kw)*.26);margin:calc(var(--kw)*-.13) 0 0 calc(var(--kw)*-.65);border:2px solid rgba(255,255,255,.65);border-radius:50%;opacity:0}
+.k-ripples i:nth-child(2){animation-delay:.5s!important}.k-ripples i:nth-child(3){animation-delay:1s!important}
+.river-scene.ripple .k-ripples i{animation:spread 3.2s ease-out forwards}
+.river-scene.afloat .k-ripples i{animation:spread 4.8s ease-out infinite}
+@keyframes spread{0%{transform:scale(.15);opacity:.9}100%{transform:scale(1.5);opacity:0}}
+.k-reflect{position:absolute;left:50%;top:88%;width:24%;height:52%;transform:translateX(-50%);opacity:0;transition:opacity 1.4s;
+  background:linear-gradient(rgba(255,214,140,.7),rgba(255,214,140,0));border-radius:50% 50% 45% 45%/15% 15% 85% 85%;filter:blur(6px);animation:rflick 2.4s ease-in-out infinite}
+.river-scene.ripple .k-reflect{opacity:.9}
+@keyframes rflick{0%,100%{transform:translateX(-50%) scale(1,1)}50%{transform:translateX(-50%) scale(1.25,.92)}}
+.river-scene .wish-toast{position:absolute;left:0;right:0;top:22%;padding:0 24px;text-align:center;color:var(--gold);text-shadow:0 2px 12px rgba(28,35,82,.85)}
+#riverText.fadein{animation:fadein .9s ease!important}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
