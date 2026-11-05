@@ -233,6 +233,8 @@ body.cam-sky .star{animation-duration:1.4s;box-shadow:0 0 10px 2px var(--gold)}
 body[data-scene="0"] .home-btn,body.releasing .home-btn{opacity:0;pointer-events:none}
 .hud-stars{right:12px;gap:6px;height:42px;padding:0 14px;border-radius:999px;font-weight:700;color:var(--night)}
 .hud-stars svg{width:22px}
+.hud-stars{opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .6s ease,transform .6s var(--ease)}   /* ซ่อนไว้จนกว่าจะเก็บดาวดวงแรก */
+.hud-stars.on{opacity:1;transform:none}
 .hud-stars.pop{animation:hudpop .5s var(--ease)}
 @keyframes hudpop{40%{transform:scale(1.18)}}
 

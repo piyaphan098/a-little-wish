@@ -284,7 +284,7 @@ function collectStar(b) {
     fly.style.transform = `translate(${hud.left + 16 - r.left}px,${hud.top + hud.height/2 - r.top - r.height/2}px) scale(.55)`;
   }));
   setTimeout(() => {
-    fly.remove(); starsFound++; $('starCount').textContent = starsFound;
+    fly.remove(); starsFound++; $('hudStars').classList.add('on'); $('starCount').textContent = starsFound;
     $('hudStars').classList.remove('pop'); void $('hudStars').offsetWidth; $('hudStars').classList.add('pop');
     if (starsFound === STAR_SPOTS.length) setTimeout(() => { $('secret').hidden = false; }, 700);   // ครบ 5 ดวง = ปลดล็อกข้อความลับ
   }, 900);
