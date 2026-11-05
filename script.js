@@ -9,15 +9,27 @@ const THEMES = {
 const state = {wish: ''};
 const choice = {theme: 'pink'};
 
-/* ====== SVG: น้องหมี ====== */
-const BEAR_SVG = `<svg class="bear" viewBox="0 0 120 130" aria-hidden="true">
-<circle cx="28" cy="26" r="16" fill="#e7b98f"/><circle cx="92" cy="26" r="16" fill="#e7b98f"/>
-<circle cx="28" cy="26" r="8" fill="#ffc2d6"/><circle cx="92" cy="26" r="8" fill="#ffc2d6"/>
-<ellipse cx="60" cy="100" rx="34" ry="28" fill="#e7b98f"/><ellipse cx="60" cy="104" rx="20" ry="18" fill="#fff3e0"/>
-<circle cx="60" cy="52" r="38" fill="#f0c9a3"/><ellipse cx="60" cy="64" rx="17" ry="13" fill="#fff3e0"/>
-<g class="eyes"><circle cx="46" cy="48" r="4" fill="#1c2352"/><circle cx="74" cy="48" r="4" fill="#1c2352"/></g>
-<ellipse cx="60" cy="60" rx="5" ry="3.5" fill="#1c2352"/><path d="M52 68q8 7 16 0" stroke="#1c2352" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-<circle cx="36" cy="62" r="6" fill="#ffb3cf" opacity=".7"/><circle cx="84" cy="62" r="6" fill="#ffb3cf" opacity=".7"/></svg>`;
+/* ====== SVG: น้องหมีสีชมพูใส่ชุดไทย (ไม่ใช้ gradient เพื่อไม่ให้ id ซ้ำระหว่างหลายฉาก) ====== */
+const bloom = (x, y, r, c) => [0,72,144,216,288].map(a =>
+  `<ellipse cx="${x}" cy="${y-r*.9}" rx="${r*.62}" ry="${r}" fill="${c}" transform="rotate(${a} ${x} ${y})"/>`).join('') + `<circle cx="${x}" cy="${y}" r="${r*.4}" fill="#f6c96b"/>`;
+const eye = x => `<ellipse cx="${x}" cy="56" rx="8" ry="10.5" fill="#4a2a22"/><ellipse cx="${x}" cy="58" rx="5.5" ry="7" fill="#a05a3c"/><circle cx="${x-2.5}" cy="52" r="3" fill="#fff"/><circle cx="${x+3}" cy="61" r="1.4" fill="#fff" opacity=".8"/>`;
+const BEAR_SVG = `<svg class="bear" viewBox="0 0 140 150" aria-hidden="true">
+<circle cx="30" cy="30" r="19" fill="#f2a0ba"/><circle cx="110" cy="30" r="19" fill="#f2a0ba"/><circle cx="31" cy="31" r="10" fill="#ffd0df"/><circle cx="109" cy="31" r="10" fill="#ffd0df"/>
+<ellipse cx="70" cy="108" rx="36" ry="30" fill="#f7b4c8"/>
+<path d="M36 104Q70 94 104 104L124 142Q70 152 16 142Z" fill="#ff8fb3"/><path d="M50 108L40 144M70 106V148M90 108L100 144" stroke="#ffc3d6" stroke-width="2" opacity=".6"/>
+<path d="M16 142Q70 152 124 142" stroke="#f0c36a" stroke-width="3" fill="none"/><path d="M36 104Q70 94 104 104L103 111Q70 101 37 111Z" fill="#f0c36a"/>
+<path d="M44 90Q58 104 96 108L100 120Q56 118 38 98Z" fill="#ffc7d9" stroke="#f0c36a" stroke-width="1.2"/>
+<ellipse cx="86" cy="114" rx="9" ry="5" fill="#ff86ab" transform="rotate(-20 86 114)"/><ellipse cx="106" cy="114" rx="9" ry="5" fill="#ff86ab" transform="rotate(20 106 114)"/><circle cx="96" cy="114" r="4" fill="#ff5f93"/>
+<ellipse cx="32" cy="114" rx="10" ry="14" fill="#f7b4c8" transform="rotate(20 32 114)"/><ellipse cx="108" cy="114" rx="10" ry="14" fill="#f7b4c8" transform="rotate(-20 108 114)"/>
+<circle cx="70" cy="58" r="42" fill="#f7b4c8"/><ellipse cx="56" cy="38" rx="22" ry="12" fill="#fff" opacity=".22"/>
+<path d="M30 70l-5 3M32 80l-5 1M110 70l5 3M108 80l5 1" stroke="#f2a0ba" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="70" cy="74" rx="20" ry="15" fill="#fff0f4"/><ellipse cx="70" cy="67" rx="6.5" ry="4.5" fill="#7a4252"/><ellipse cx="68" cy="65.5" rx="2.2" ry="1.2" fill="#fff" opacity=".7"/>
+<path d="M70 71v5" stroke="#7a4252" stroke-width="1.6"/><path d="M58 77Q70 94 82 77Z" fill="#c2475f"/><ellipse cx="70" cy="86" rx="6" ry="3.5" fill="#ff8fa8"/>
+<ellipse cx="40" cy="72" rx="8" ry="5" fill="#ff7fa6" opacity=".55"/><ellipse cx="100" cy="72" rx="8" ry="5" fill="#ff7fa6" opacity=".55"/>
+<path d="M45 42Q52 38 58 41M82 41Q88 38 95 42" stroke="#d97a9a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<g class="eyes">${eye(52)}${eye(88)}<path d="M44 49l-5-3M96 49l5-3" stroke="#4a2a22" stroke-width="2" stroke-linecap="round"/></g>
+<ellipse cx="26" cy="36" rx="7" ry="3" fill="#8fcb9d" transform="rotate(-30 26 36)"/>${bloom(40,22,7,'#ff9ec1')}${bloom(52,15,6,'#ffffff')}${bloom(30,29,5.5,'#ffc2d6')}
+${[[26,42],[25,50],[26,58],[28,66]].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="#fff"/>`).join('')}</svg>`;
 
 /* ====== SVG: ท่าน้ำ และใบบัว ====== */
 const PIER_SVG = `<svg class="pier" viewBox="0 0 300 80" aria-hidden="true">
@@ -98,7 +110,7 @@ function onEnter(i) {
   if (i === 3) { $('preview2').innerHTML = krathongSVG(false); $('lightBtn').disabled = false; $('candleText').innerHTML = 'กระทงของเธอพร้อมแล้ว<br>ลองจุดเทียนดูนะ'; }
   if (i === 4) resetRiver();
   if (i === 5) {                      // Scene คำอธิษฐาน (กล้องที่เงยขึ้นหาพระจันทร์ค่อย ๆ กลับลงมา)
-    setCam(null); riverScene.classList.remove('sky');   // กลับมาที่โหมดเขียน (ข้อความเดิมยังอยู่)
+    setCam(null); riverScene.classList.remove('sky'); document.body.classList.remove('releasing');   // กลับมาที่โหมดเขียน (ข้อความเดิมยังอยู่)
     setWishMode('edit');
     ['saveWish','keepWish','confirmWish','editWish'].forEach(id => { $(id).disabled = false; });
     document.querySelector('.wish-card').classList.remove('sending');
@@ -165,10 +177,12 @@ $('envelope').onclick = () => {
     setTimeout(() => { $('replayBtn').hidden = false; }, 900);
   }, 2000);
 };
-$('replayBtn').onclick = () => {
+function restartStory() {             // เริ่มเรื่องใหม่: ล้างคำอธิษฐาน (ดาวที่เก็บได้ยังอยู่)
   state.wish = ''; $('wishInput').value = ''; $('wishCount').textContent = '0';
   goTo(0);
-};
+}
+$('replayBtn').onclick = restartStory;
+$('homeBtn').onclick = () => { if (!document.body.classList.contains('releasing')) restartStory(); };
 
 /* ====== My Little Wish ====== */
 function setWishMode(mode) {          // 'edit' = เขียน, 'preview' = ดูก่อนยืนยัน
@@ -211,14 +225,14 @@ function setRiverText(html) {
 }
 function resetRiver() {
   riverTimers.forEach(clearTimeout); riverTimers = [];
-  riverScene.classList.remove('touch', 'ripple', 'afloat', 'away', 'sky'); setCam(null);
+  riverScene.classList.remove('touch', 'ripple', 'afloat', 'away', 'sky'); setCam(null); document.body.classList.remove('releasing');
   $('kBob').innerHTML = krathongSVG(true, choice.theme, false);
   $('riverText').innerHTML = 'ค่อย ๆ วางกระทงลงบนผิวน้ำ<br>แล้วให้คำอธิษฐานของเธอลอยไปพร้อมกับสายน้ำ ♡';
   $('wishToast').classList.remove('show'); $('releaseBtn').disabled = false;
 }
 $('releaseBtn').onclick = () => {
   if ($('releaseBtn').disabled) return;                         // กันกดซ้ำ
-  $('releaseBtn').disabled = true;
+  $('releaseBtn').disabled = true; document.body.classList.add('releasing');
   const k = matchMedia('(prefers-reduced-motion: reduce)').matches ? .25 : 1;   // ลดการเคลื่อนไหว = ย่นเวลา
   const at = (ms, fn) => riverTimers.push(setTimeout(fn, ms * k));
   riverScene.classList.add('touch'); setCam('cam-in'); setRiverText('ค่อย ๆ วางลง… เบา ๆ นะ');
@@ -231,3 +245,48 @@ $('releaseBtn').onclick = () => {
   });
   at(14000, () => goTo(5));
 };
+
+/* ====== ฉากหลังเพิ่มเติม: ซากุระและกลีบดอกไม้ร่วง แสงไฟริมฝั่ง ====== */
+(function buildBlossom() {
+  let s = '<svg viewBox="0 0 200 140" aria-hidden="true"><path d="M-4 20C40 30 80 24 130 60S170 110 190 130" fill="none" stroke="#6b4a52" stroke-width="5" stroke-linecap="round"/>';
+  [[20,26,9,'#ffb3cf'],[52,34,11,'#ffc2d6'],[84,30,8,'#ffffff'],[110,52,10,'#ffb3cf'],[138,78,9,'#ffc2d6'],[70,54,7,'#ffffff'],[34,54,7,'#ffb3cf'],[160,106,8,'#ffc2d6'],[96,72,6,'#ffb3cf']]
+    .forEach(p => { s += bloom(p[0], p[1], p[2], p[3]); });
+  $('blossom').innerHTML = s + '</svg>';
+  for (let i = 0; i < 7; i++) {      // กลีบดอกไม้ค่อย ๆ ร่วง
+    const p = document.createElement('i'); p.className = 'petal';
+    p.style.cssText = `left:${8 + i * 13}%;--t:${14 + (i % 3) * 4}s;--d:${-i * 2.3}s`;
+    document.querySelector('.backdrop').appendChild(p);
+  }
+})();
+
+/* ====== Hidden Stars: ดาวซ่อน 5 ดวง (Scene 1,2,3,4 และจดหมาย) ====== */
+const STAR_SPOTS = [[0,'9%','44%'],[1,'80%','56%'],[2,'88%','28%'],[3,'10%','32%'],[6,'86%','13%']];
+const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.6 6.8L12 16.8 5.8 20.4l1.6-6.8L2.2 9l6.9-.7z" fill="#ffd36e"/></svg>';
+let starsFound = 0;
+STAR_SPOTS.forEach(spot => {
+  const b = document.createElement('button');
+  b.className = 'hidden-star'; b.setAttribute('aria-label', 'ดาวที่ซ่อนอยู่'); b.innerHTML = STAR_SVG;
+  b.style.cssText = `left:${spot[1]};top:${spot[2]}`; b.onclick = () => collectStar(b);
+  scenes[spot[0]].appendChild(b);
+});
+function collectStar(b) {
+  if (b.dataset.got) return; b.dataset.got = '1';               // เก็บได้ครั้งเดียว
+  const r = b.getBoundingClientRect(), hud = $('hudStars').getBoundingClientRect();
+  for (let i = 0; i < 8; i++) {                                 // ประกายแตกกระจาย
+    const s = document.createElement('i'); s.className = 'spark';
+    s.style.cssText = `left:${r.left + r.width/2}px;top:${r.top + r.height/2}px;--a:${i * 45}deg`;
+    document.body.appendChild(s); setTimeout(() => s.remove(), 800);
+  }
+  const fly = b.cloneNode(true); fly.className = 'star-fly';    // ดาวบินไปที่ตัวนับ
+  fly.style.cssText = `left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px`;
+  document.body.appendChild(fly); b.classList.add('got');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    fly.style.transform = `translate(${hud.left + 16 - r.left}px,${hud.top + hud.height/2 - r.top - r.height/2}px) scale(.55)`;
+  }));
+  setTimeout(() => {
+    fly.remove(); starsFound++; $('starCount').textContent = starsFound;
+    $('hudStars').classList.remove('pop'); void $('hudStars').offsetWidth; $('hudStars').classList.add('pop');
+    if (starsFound === STAR_SPOTS.length) setTimeout(() => { $('secret').hidden = false; }, 700);   // ครบ 5 ดวง = ปลดล็อกข้อความลับ
+  }, 900);
+}
+$('secretClose').onclick = () => { $('secret').hidden = true; };

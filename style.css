@@ -114,11 +114,11 @@ body[data-scene="1"] .backdrop{transform:scale(1.08)}   /* Scene 2: กล้อ
 .wish-card.sending{transition:transform .9s ease-in,opacity .9s;transform:translateY(-40px) scale(.9);opacity:0}
 
 /* ---------- ยืนบนพื้น / ลอยบนน้ำ ---------- */
-body[data-scene="0"] .river,body[data-scene="1"] .river{height:40%}
-body[data-scene="2"] .river,body[data-scene="3"] .river,body[data-scene="4"] .river{height:50%}
+body[data-scene="0"],body[data-scene="1"]{--rh:40%}
+body[data-scene="2"],body[data-scene="3"],body[data-scene="4"]{--rh:50%}
 .on-water{justify-content:flex-end;padding-bottom:calc(env(safe-area-inset-bottom) + 20px)}
-.on-water .lead{margin-bottom:auto;padding-top:5vh}
-.on-water .title{margin-top:5vh}
+.on-water .lead{margin-bottom:auto;padding-top:5vh}.on-water>.lead:first-child{padding-top:11vh}
+.on-water .title{margin-top:10vh}
 .pier{width:min(88vw,320px);height:auto;display:block;margin-top:-6px}
 .pads{position:absolute;bottom:3%;width:clamp(90px,26vw,150px);animation:bob 5s ease-in-out infinite}
 .pads svg{width:100%;display:block}.pads.left{left:2%}.pads.right{right:3%;animation-delay:-2s}
@@ -134,7 +134,7 @@ body[data-scene="2"] .river,body[data-scene="3"] .river,body[data-scene="4"] .ri
 @media (max-height:640px){.title{font-size:2rem}.preview{width:170px}.preview.big{width:210px}.floater{margin-top:4vh}}
 /* ---------- ความนุ่มนวล ---------- */
 /* ทุกอย่างใน Scene ค่อย ๆ ปรากฏทีละชิ้น (ลำดับตาม --i ที่ JS ใส่ให้) */
-.scene.active>:not(.floater):not(.wish-card):not(#wishFinal):not(.k-cam){animation:rise 1s var(--ease) backwards;animation-delay:calc(var(--i,0)*110ms + 120ms)}
+.scene.active>:not(.floater):not(.wish-card):not(#wishFinal):not(.k-cam):not(.hidden-star){animation:rise 1s var(--ease) backwards;animation-delay:calc(var(--i,0)*110ms + 120ms)}
 @keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}}
 /* ปุ่มหลักมีแสงหายใจเบา ๆ ชวนให้กด */
 .btn::after{content:'';position:absolute;inset:-3px;border-radius:999px;box-shadow:0 0 22px 5px rgba(255,194,214,.65);opacity:0;pointer-events:none;animation:halo 3.6s ease-in-out 1.6s infinite}
@@ -182,9 +182,9 @@ body.cam-sky .star{animation-duration:1.4s;box-shadow:0 0 10px 2px var(--gold)}
 .river-scene.sky .k-cam{transform:translateY(17vh)}
 .river-scene.sky .btn{opacity:0;transition:opacity 1.2s}
 .river-scene.touch .btn{opacity:0;pointer-events:none;transition:opacity .6s}
-.watcher{position:absolute;left:0;bottom:13vh;width:min(44vw,190px)}
+.watcher{position:absolute;left:0;bottom:13vh;width:min(36vw,160px)}
 .watcher .bear{width:100%}.watcher .pier{width:150%;margin-left:-35%}
-.k-wrap{--kw:clamp(220px,64vw,320px);position:absolute;left:60%;top:76%;width:var(--kw);margin-left:calc(var(--kw)/-2);margin-top:calc(var(--kw)*-.75);transform-origin:50% 90%}
+.k-wrap{--kw:clamp(200px,56vw,300px);position:absolute;left:65%;top:76%;width:var(--kw);margin-left:calc(var(--kw)/-2);margin-top:calc(var(--kw)*-.75);transform-origin:50% 90%}
 .k-bob{transform:translateY(calc(var(--kw)*-.24));animation:held 3.6s ease-in-out infinite}   /* ถือไว้เหนือน้ำ */
 .k-bob svg{display:block;width:100%;overflow:visible}
 @keyframes held{50%{transform:translateY(calc(var(--kw)*-.24 - 5px)) rotate(1.2deg)}}
@@ -209,5 +209,45 @@ body.cam-sky .star{animation-duration:1.4s;box-shadow:0 0 10px 2px var(--gold)}
 .river-scene .wish-toast{position:absolute;left:0;right:0;top:22%;padding:0 24px;text-align:center;color:var(--gold);text-shadow:0 2px 12px rgba(28,35,82,.85)}
 #riverText.fadein{animation:fadein .9s ease!important}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}}
+
+/* ---------- ฉากริมน้ำ: วัด ไฟริมฝั่ง ซากุระ กลีบดอกไม้ ---------- */
+.river{height:var(--rh,34%)}
+.temple{position:absolute;right:-3%;bottom:var(--rh,34%);width:min(64vw,300px);transition:bottom 1.2s ease;filter:drop-shadow(0 0 16px rgba(255,200,120,.35))}
+.shore-lights{position:absolute;left:0;right:0;bottom:var(--rh,34%);height:8px;transition:bottom 1.2s ease;opacity:.85;
+  background:radial-gradient(circle,#ffd89a 0 1.6px,transparent 2.4px) 0 0/15px 8px repeat-x;filter:drop-shadow(0 0 4px #ffb86b)}
+.blossom{position:absolute;left:-6%;top:-3%;width:min(42vw,190px);opacity:.9;transform-origin:0 0;animation:sway-branch 9s ease-in-out infinite alternate}
+.blossom svg{width:100%;display:block}
+@keyframes sway-branch{to{transform:rotate(1.6deg)}}
+.petal{position:absolute;top:-4%;width:9px;height:12px;border-radius:70% 0 70% 0;background:#ffc2d6;opacity:.8;animation:fall var(--t) linear var(--d) infinite}
+@keyframes fall{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(34px,50vh) rotate(180deg)}100%{transform:translate(-12px,105vh) rotate(360deg);opacity:0}}
+
+/* ---------- UI กลมกลืนกับภาพ ---------- */
+.flourish{width:min(70vw,280px);height:auto;filter:drop-shadow(0 0 8px rgba(255,194,214,.7))}
+.btn:not(.ghost){outline:2px dashed rgba(255,255,255,.75);outline-offset:-7px}
+.home-btn,.hud-stars{position:fixed;top:calc(env(safe-area-inset-top) + 10px);z-index:50;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(var(--cream),var(--pink));color:#b04a78;border:2px solid rgba(255,255,255,.8);box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.home-btn{left:12px;width:46px;height:46px;border-radius:50%;cursor:pointer;transition:opacity .4s}
+.home-btn svg{width:24px}
+body[data-scene="0"] .home-btn,body.releasing .home-btn{opacity:0;pointer-events:none}
+.hud-stars{right:12px;gap:6px;height:42px;padding:0 14px;border-radius:999px;font-weight:700;color:var(--night)}
+.hud-stars svg{width:22px}
+.hud-stars.pop{animation:hudpop .5s var(--ease)}
+@keyframes hudpop{40%{transform:scale(1.18)}}
+
+/* ---------- Hidden Stars ---------- */
+.hidden-star{position:absolute;z-index:5;width:46px;height:46px;padding:11px;border:0;background:none;cursor:pointer;animation:starpulse 2.8s ease-in-out infinite}
+.hidden-star svg{width:100%;height:100%;filter:drop-shadow(0 0 6px #ffd36e)}
+@keyframes starpulse{0%,100%{opacity:.5;transform:scale(.85) rotate(0)}50%{opacity:1;transform:scale(1.1) rotate(12deg)}}
+.hidden-star.got{animation:none;opacity:0;pointer-events:none}
+.star-fly{position:fixed;z-index:70;padding:0;border:0;background:none;pointer-events:none;transition:transform .9s cubic-bezier(.5,0,.3,1)}
+.star-fly svg{width:100%;height:100%;filter:drop-shadow(0 0 12px #ffd36e)}
+.spark{position:fixed;z-index:70;width:6px;height:6px;margin:-3px;border-radius:50%;background:#ffe9a8;box-shadow:0 0 8px #ffd36e;pointer-events:none;animation:burst .7s ease-out forwards}
+@keyframes burst{to{transform:rotate(var(--a)) translateX(34px) scale(.2);opacity:0}}
+.secret{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,18,60,.6);animation:fadein .6s ease}
+.secret[hidden]{display:none}
+.secret-card{width:min(100%,340px);padding:22px 18px;text-align:center;line-height:1.8;background:var(--cream);color:var(--night);border-radius:6px 22px 6px 22px;
+  box-shadow:0 14px 40px rgba(0,0,0,.45),inset 0 0 0 3px var(--gold);animation:cardIn .8s ease-out}
+.secret-title{font-weight:700;font-size:1.2rem;color:#a35a84;margin-bottom:8px}
+.secret-card .btn{margin-top:14px;padding:8px 26px;min-height:46px}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
