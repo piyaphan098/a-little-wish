@@ -95,13 +95,13 @@ function goTo(next) {
   if (busy || next === current) return;
   busy = true;
   const from = scenes[current], to = scenes[next];
-  from.classList.remove('active');
-  setTimeout(() => {
-    from.hidden = true; to.hidden = false;
-    current = next; document.body.dataset.scene = next; onEnter(next);
-    requestAnimationFrame(() => to.classList.add('active'));
-    setTimeout(() => { busy = false; }, 500);
-  }, 500);
+  from.classList.remove('active');                    // ฉากเก่าค่อย ๆ จาง
+  setTimeout(() => {                                  // ฉากใหม่เริ่มขึ้นตอนฉากเก่ายังจางไม่หมด จึงต่อเนื่อง
+    to.hidden = false; current = next; document.body.dataset.scene = next; onEnter(next);
+    void to.offsetWidth;                              // บังคับให้เบราว์เซอร์วาดสถานะเริ่มต้นก่อน ไม่งั้น fade จะไม่ทำงาน
+    to.classList.add('active');
+  }, 260);
+  setTimeout(() => { from.hidden = true; busy = false; }, 850);
 }
 
 /* ====== เตรียมแต่ละ Scene เมื่อเข้ามา ====== */
@@ -290,3 +290,17 @@ function collectStar(b) {
   }, 900);
 }
 $('secretClose').onclick = () => { $('secret').hidden = true; };
+
+/* ====== Parallax: ฉากหลังขยับนุ่ม ๆ ตามนิ้วที่ลาก หรือการเอียงเครื่อง (Android) ====== */
+(function parallax() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+  const loop = () => {                // ค่อย ๆ ไล่ตามเป้าหมาย (lerp) จึงไม่กระตุก
+    cx += (tx - cx) * .08; cy += (ty - cy) * .08;
+    document.body.style.setProperty('--px', cx.toFixed(3)); document.body.style.setProperty('--py', cy.toFixed(3));
+    raf = (Math.abs(tx - cx) > .002 || Math.abs(ty - cy) > .002) ? requestAnimationFrame(loop) : 0;
+  };
+  const aim = (x, y) => { tx = Math.max(-1, Math.min(1, x)); ty = Math.max(-1, Math.min(1, y)); if (!raf) raf = requestAnimationFrame(loop); };
+  addEventListener('pointermove', e => aim(e.clientX / innerWidth * 2 - 1, e.clientY / innerHeight * 2 - 1), {passive: true});
+  addEventListener('deviceorientation', e => { if (e.gamma != null) aim(e.gamma / 25, (e.beta - 50) / 25); }, {passive: true});
+})();
